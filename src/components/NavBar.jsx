@@ -27,9 +27,19 @@ function linkStyle(active) {
     fontSize: '0.95rem',
     paddingBottom: '2px',
     borderBottom: active ? '2px solid #f5c842' : '2px solid transparent',
-    transition: 'color 0.15s',
   }
 }
+
+const adminLink = (active) => ({
+  color: active ? '#f5c842' : '#8ab0cc',
+  textDecoration: 'none',
+  fontWeight: active ? '700' : '400',
+  fontSize: '0.85rem',
+  paddingBottom: '2px',
+  borderBottom: active ? '2px solid #f5c842' : '2px solid transparent',
+  marginLeft: '0.5rem',
+  opacity: 0.85,
+})
 
 export default function NavBar() {
   const { pathname } = useLocation()
@@ -40,6 +50,7 @@ export default function NavBar() {
       <Link to="/register" style={linkStyle(pathname === '/register')}>Register</Link>
       <Link to="/members" style={linkStyle(pathname === '/members')}>Members</Link>
       <Link to="/teams" style={linkStyle(pathname === '/teams')}>Teams</Link>
+      <Link to="/admin" style={adminLink(pathname === '/admin')}>Admin</Link>
     </nav>
   )
 }
