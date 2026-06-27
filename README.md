@@ -11,7 +11,10 @@ Built with React 19 + Vite. All state is in-memory — there is no backend or da
 - **Register players** via a multi-section form that collects personal details, home address (with NZ suburb/postcode lookup), a player photo, and medical notes
 - **Auto-calculates grade** from date of birth and gender, based on age as at 1 January of the current year (Under 12s through to Senior)
 - **Enforces age rules** — players under 21 must provide a school or tertiary institution; players under 18 must have a parent or guardian register alongside them
-- **Lists all registered members** in a table with photo, grade, contact details, and parent information
+- **Family registrations** — after registering an Under 16 player, parents can register another family member with parent details pre-filled; players 16 and over can join a family group or register independently
+- **Parent as player** — each parent section includes a "Player Status" toggle; parents who are also players complete their own registration details and are saved as separate member records with a "Parent-Player" badge
+- **Volunteer sign-up** — parents can indicate they want to volunteer (Committee, Manager, Coach, or Other) during registration
+- **Lists all registered members** in a table with photo, grade, contact details, and parent information; parent-player records are clearly badged
 - **Assigns players to squads** on the Teams page using a dropdown per player
 - **Admin page** for editing the terms and conditions shown on the registration form
 
@@ -58,8 +61,10 @@ npm run lint      # Run ESLint
 src/
   App.jsx               # Root component — router, shared state (members, terms)
   main.jsx              # React entry point
+  assets/
+    logo.png            # Marist Water Polo club logo
   components/
-    NavBar.jsx          # Top navigation bar
+    NavBar.jsx          # Top navigation bar with club logo
   pages/
     HomePage.jsx        # Landing page
     RegisterPage.jsx    # Player registration form
@@ -85,6 +90,20 @@ Grades are determined by the player's age on 1 January of the current calendar y
 | 16–17 | Under 18 Men | Under 18 Women | Under 18s |
 | 18–20 | Under 21 Men | Under 21 Women | Under 21s |
 | 21+ | Senior Men | Senior Women | Senior |
+
+---
+
+## Branding
+
+The app uses the Marist Water Polo Club colour scheme, mirrored from [maristwaterpolo.org.nz](https://www.maristwaterpolo.org.nz):
+
+| Role | Value |
+|---|---|
+| Primary (navy) | `#00205b` |
+| Backgrounds | `#ffffff` |
+| Badges / highlights | `#e8ecf2` |
+
+The club logo is stored at `src/assets/logo.png` and is imported directly in `NavBar.jsx`. To update the logo, replace that file.
 
 ---
 

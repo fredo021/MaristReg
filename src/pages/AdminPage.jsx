@@ -1,11 +1,11 @@
 import { useState } from 'react'
 
 const page = { maxWidth: '720px', margin: '3rem auto', padding: '0 1.5rem', fontFamily: 'Calibri, sans-serif' }
-const heading = { fontSize: '1.9rem', color: '#1a3a5c', fontWeight: '700', marginBottom: '0.4rem' }
+const heading = { fontSize: '1.9rem', color: '#00205b', fontWeight: '700', marginBottom: '0.4rem' }
 const sub = { color: '#666', fontSize: '0.95rem', marginBottom: '1.75rem', lineHeight: '1.5' }
 
 const saveBtn = {
-  background: '#1a3a5c', color: '#fff', border: 'none', borderRadius: '8px',
+  background: '#00205b', color: '#fff', border: 'none', borderRadius: '8px',
   padding: '0.75rem 2rem', fontSize: '1rem', cursor: 'pointer', fontWeight: '700', marginTop: '1rem',
 }
 
@@ -15,7 +15,7 @@ const cancelBtn = {
 }
 
 const successMsg = {
-  background: '#e6f4ea', border: '1px solid #4caf50', color: '#2e7d32',
+  background: '#e8ecf2', border: '1px solid #b0bdd0', color: '#00205b',
   borderRadius: '8px', padding: '0.75rem 1rem', marginBottom: '1.25rem', fontWeight: '600', fontSize: '0.95rem',
 }
 
@@ -47,7 +47,7 @@ export default function AdminPage({ terms, setTerms }) {
         background: '#fff', border: '1px solid #dde3ec', borderRadius: '10px',
         padding: '1.5rem', boxShadow: '0 1px 4px rgba(0,0,0,0.06)',
       }}>
-        <label style={{ display: 'block', fontWeight: '700', color: '#1a3a5c', marginBottom: '0.6rem', fontSize: '0.92rem' }}>
+        <label style={{ display: 'block', fontWeight: '700', color: '#00205b', marginBottom: '0.6rem', fontSize: '0.92rem' }}>
           Terms &amp; Conditions Text
         </label>
         <textarea

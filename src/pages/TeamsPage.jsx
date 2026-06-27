@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 const TEAMS = ['Unassigned', 'U12 Marlins', 'U14 Sharks', 'U16 Barracudas', 'U18 Titans', 'Senior A', 'Senior B']
 
 const page = { maxWidth: '960px', margin: '3rem auto', padding: '0 1.5rem', fontFamily: 'Calibri, sans-serif' }
-const heading = { fontSize: '1.9rem', color: '#1a3a5c', marginBottom: '1.5rem', fontWeight: '700' }
+const heading = { fontSize: '1.9rem', color: '#00205b', marginBottom: '1.5rem', fontWeight: '700' }
 
 const teamColors = {
   'Unassigned': '#999',
@@ -57,7 +57,7 @@ export default function TeamsPage({ members }) {
                 padding: '0.6rem 0.9rem', boxShadow: '0 1px 4px rgba(0,0,0,0.06)',
               }}>
                 <div>
-                  <span style={{ fontWeight: '600', color: '#1a3a5c' }}>{m.firstName} {m.lastName}</span>
+                  <span style={{ fontWeight: '600', color: '#00205b' }}>{m.firstName} {m.lastName}</span>
                   <span style={{ marginLeft: '0.5rem', fontSize: '0.8rem', color: '#777' }}>{m.grade}</span>
                 </div>
                 <select
@@ -91,7 +91,7 @@ export default function TeamsPage({ members }) {
                     display: 'inline-block', width: '10px', height: '10px', borderRadius: '50%',
                     background: teamColors[team],
                   }} />
-                  <span style={{ fontWeight: '700', color: '#1a3a5c', fontSize: '0.92rem' }}>{team}</span>
+                  <span style={{ fontWeight: '700', color: '#00205b', fontSize: '0.92rem' }}>{team}</span>
                   <span style={{ marginLeft: 'auto', fontSize: '0.82rem', color: '#777' }}>
                     {grouped[team].length} player{grouped[team].length !== 1 ? 's' : ''}
                   </span>
