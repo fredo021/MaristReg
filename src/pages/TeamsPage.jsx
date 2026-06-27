@@ -58,7 +58,7 @@ export default function TeamsPage({ members }) {
               }}>
                 <div>
                   <span style={{ fontWeight: '600', color: '#1a3a5c' }}>{m.firstName} {m.lastName}</span>
-                  <span style={{ marginLeft: '0.5rem', fontSize: '0.8rem', color: '#777' }}>{m.ageGroup}</span>
+                  <span style={{ marginLeft: '0.5rem', fontSize: '0.8rem', color: '#777' }}>{m.grade}</span>
                 </div>
                 <select
                   value={assignments[m.id] || 'Unassigned'}

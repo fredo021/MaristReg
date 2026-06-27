@@ -36,15 +36,26 @@ All shared state lives in `App.jsx` and is passed as props:
 ```js
 {
   firstName, lastName, gender, dateOfBirth,
-  grade,        // calculated string e.g. "Under 16 Girls"
-  ageOnJan1,    // integer
+  grade,            // calculated string e.g. "Under 16 Girls"
+  ageOnJan1,        // integer — age as at 1 Jan of current year
   mobile, homePhone, email,
   streetAddress, suburb, city, postcode,
-  institution,  // school/tertiary if age < 21, else empty string
+  institution,      // school/tertiary (age < 21), else empty string
   medicalNotes,
-  photo,        // data URL (base64) or null
-  parentFirstName, parentLastName, parentEmail, parentMobile, parentRelationship,
-  acceptedTerms,
+  photo,            // base64 data URL or null
+  registrationMode, // 'independent' | 'family' (shown for age >= 16 only)
+  familyGroupName,  // string, only relevant when registrationMode === 'family'
+  // Parent 1 (present when age < 18)
+  parentFirstName, parentLastName, parentEmail, parentMobile,
+  parentRelationship, parentOccupation,
+  parentVolunteer,        // boolean
+  parentVolunteerRoles,   // string[] e.g. ['Coach', 'Other']
+  parentVolunteerOther,   // string, only relevant when roles includes 'Other'
+  // Parent 2 (present when age < 18 AND user added a second parent)
+  parent2FirstName, parent2LastName, parent2Email, parent2Mobile,
+  parent2Relationship, parent2Occupation,
+  parent2Volunteer, parent2VolunteerRoles, parent2VolunteerOther,
+  acceptedTerms,    // boolean
 }
 ```
 
@@ -62,20 +73,25 @@ Age is calculated as of **1 January of the current calendar year** (not today's 
 
 ### NZ postcode lookup (`src/utils/nzSuburbs.js`)
 
-Static dataset of ~240 NZ suburbs. `searchSuburbs(query)` returns up to 8 `{ suburb, city, postcode }` matches. The suburb dropdown in `RegisterPage` uses `onBlur` with a 200 ms delay (not `onBlur` directly) so `onMouseDown` on a result fires before the list closes.
+Static dataset of ~240 NZ suburbs. `searchSuburbs(query)` returns up to 8 `{ suburb, city, postcode }` matches. The suburb dropdown in `RegisterPage` uses `onBlur` with a 200 ms delay so `onMouseDown` on a result fires before the list closes — do not change this to `onClick`.
 
-### Conditional form sections (`RegisterPage`)
+### RegisterPage — conditional sections and flow
 
-Both derived from `getAgeAsOfJan1(form.dateOfBirth)` on every render:
-- **Education section** — rendered when `age < 21`; institution field is `required`
-- **Parent / Guardian section** — rendered when `age < 18`; all parent fields are `required`
+Sections are conditionally rendered (not hidden with CSS) based on age derived from `getAgeAsOfJan1(form.dateOfBirth)`:
 
-Because these sections use conditional rendering (not CSS `display:none`), the `required` attributes are only present in the DOM when the sections are visible.
+| Section | Condition | Notes |
+|---|---|---|
+| Registration Type (family/independent) | `age >= 16` | Shown for U18 grade and above |
+| Education | `age < 21` | Institution field is `required` |
+| Parent / Guardian | `age < 18` | All P1 fields required; P2 shown via `showP2` state |
+| Second parent block | `showP2 === true` | Toggled by "+ Add" / "— Remove" buttons |
+
+Because sections use conditional rendering, `required` attributes are only in the DOM when visible — no hidden-field validation issues.
+
+**Post-submit success screen:** When `done === true`, the form is replaced by a confirmation card. For players with `age < 16`, a **"Register Another Family Member"** button appears — it resets the player fields but pre-fills all parent fields (including second parent if present) via `savedParent` state captured at submit time. `prefilled === true` shows an informational banner at the top of the re-loaded form.
+
+**`renderVolunteer(num)`** is a render helper function (not a component) defined inside `RegisterPage` and called as `{renderVolunteer(1)}` / `{renderVolunteer(2)}`. It must remain a plain function — not extracted to a component — to avoid remount issues caused by function recreation on every render.
 
 ### Styling conventions
 
-All styles are inline JS objects defined as constants at the top of each component file. There is no CSS framework or CSS modules. Shared style constants are not extracted across files — each page/component defines its own.
-
-### Photo upload
-
-Uses `FileReader.readAsDataURL` to store the image as a base64 data URL in React state. Capped at 5 MB client-side. The data URL is stored in the `photo` field of the member object and rendered as an `<img src={...}>` in `MembersPage`.
+All styles are inline JS objects defined as constants at the top of each component file. No CSS framework or CSS modules. Style constants are not shared across files.
