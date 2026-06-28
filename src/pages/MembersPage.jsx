@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom'
 
-const page = { maxWidth: '1100px', margin: '3rem auto', padding: '0 1.5rem', fontFamily: 'Calibri, sans-serif' }
+const page    = { maxWidth: '1200px', margin: '3rem auto', padding: '0 1.5rem', fontFamily: 'Calibri, sans-serif' }
 const heading = { fontSize: '1.9rem', color: '#1a3a5c', marginBottom: '1.5rem', fontWeight: '700' }
-const empty = { color: '#777', textAlign: 'center', marginTop: '3rem', fontSize: '1rem' }
+const empty   = { color: '#777', textAlign: 'center', marginTop: '3rem', fontSize: '1rem' }
 
 const th = {
   background: '#00205b', color: '#fff', padding: '0.65rem 0.9rem',
@@ -13,6 +13,12 @@ const td = { padding: '0.6rem 0.9rem', fontSize: '0.88rem', color: '#333', borde
 const gradeBadge = {
   background: '#e8ecf2', color: '#00205b', borderRadius: '12px',
   padding: '0.15rem 0.6rem', fontSize: '0.8rem', fontWeight: '600', whiteSpace: 'nowrap',
+}
+
+const regIdBadge = {
+  background: '#00205b', color: '#fff', borderRadius: '6px',
+  padding: '0.15rem 0.55rem', fontSize: '0.78rem', fontWeight: '700',
+  letterSpacing: '0.03em', whiteSpace: 'nowrap', fontFamily: 'monospace',
 }
 
 const parentPlayerBadge = {
@@ -51,7 +57,7 @@ export default function MembersPage({ members }) {
           <table style={{ width: '100%', borderCollapse: 'collapse', boxShadow: '0 2px 8px rgba(0,0,0,0.08)', borderRadius: '8px', overflow: 'hidden' }}>
             <thead>
               <tr>
-                {['Photo', 'Name', 'Grade', 'DOB', 'Mobile', 'Email', 'Suburb', 'School / Institution', 'Parent'].map(h => (
+                {['Reg ID', 'Photo', 'Name', 'Grade', 'DOB', 'Mobile', 'Email', 'Suburb', 'School / Institution', 'Parent'].map(h => (
                   <th key={h} style={th}>{h}</th>
                 ))}
               </tr>
@@ -59,6 +65,11 @@ export default function MembersPage({ members }) {
             <tbody>
               {members.map((m, i) => (
                 <tr key={m.id} style={{ background: i % 2 === 0 ? '#fff' : '#f7f9fc' }}>
+                  <td style={td}>
+                    {m.regId
+                      ? <span style={regIdBadge}>{m.regId}</span>
+                      : <span style={{ color: '#bbb', fontSize: '0.8rem' }}>—</span>}
+                  </td>
                   <td style={td}>
                     {m.photo
                       ? <img src={m.photo} alt="" style={{ width: '36px', height: '45px', objectFit: 'cover', borderRadius: '4px', display: 'block' }} />
@@ -74,7 +85,7 @@ export default function MembersPage({ members }) {
                   <td style={td}><span style={gradeBadge}>{m.grade || '—'}</span></td>
                   <td style={{ ...td, whiteSpace: 'nowrap' }}>{m.dateOfBirth || '—'}</td>
                   <td style={{ ...td, whiteSpace: 'nowrap' }}>{m.mobile || '—'}</td>
-                  <td style={td}>{m.email}</td>
+                  <td style={td}>{m.email || '—'}</td>
                   <td style={{ ...td, whiteSpace: 'nowrap' }}>{m.suburb || '—'}</td>
                   <td style={td}>{m.institution || '—'}</td>
                   <td style={{ ...td, whiteSpace: 'nowrap' }}>

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import NavBar from './components/NavBar'
 import HomePage from './pages/HomePage'
@@ -6,6 +6,8 @@ import RegisterPage from './pages/RegisterPage'
 import MembersPage from './pages/MembersPage'
 import TeamsPage from './pages/TeamsPage'
 import AdminPage from './pages/AdminPage'
+import { supabase } from './lib/supabase'
+import { memberToRow, rowToMember } from './lib/memberMapping'
 
 const DEFAULT_TERMS =
 `Welcome to Marist Water Polo Club.
@@ -38,21 +40,67 @@ For players under 18 years of age, the parent or guardian registered alongside t
 
 function App() {
   const [members, setMembers] = useState([])
-  const [terms, setTerms] = useState(DEFAULT_TERMS)
+  const [terms, setTerms]     = useState(DEFAULT_TERMS)
+  const [loading, setLoading] = useState(!!supabase)
+  const [dbError, setDbError] = useState(null)
 
-  function addMember(member) {
-    setMembers(prev => [...prev, { ...member, id: Date.now() }])
+  useEffect(() => {
+    if (!supabase) return
+    supabase
+      .from('members')
+      .select('*')
+      .order('created_at', { ascending: true })
+      .then(({ data, error }) => {
+        if (error) {
+          console.error('Failed to load members:', error)
+          setDbError('Could not connect to the database. Registrations will not be saved.')
+        } else {
+          setMembers((data || []).map(rowToMember))
+        }
+        setLoading(false)
+      })
+  }, [])
+
+  async function addMember(member) {
+    if (!supabase) {
+      setMembers(prev => [...prev, { ...member, id: Date.now(), regId: null }])
+      return
+    }
+    const { data, error } = await supabase
+      .from('members')
+      .insert(memberToRow(member))
+      .select()
+      .single()
+    if (error) {
+      console.error('Failed to save member:', error)
+      alert('Registration could not be saved — please try again.')
+      throw error
+    }
+    setMembers(prev => [...prev, rowToMember(data)])
+  }
+
+  if (loading) {
+    return (
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh', fontFamily: 'Calibri, sans-serif', color: '#00205b', fontSize: '1.1rem' }}>
+        Loading…
+      </div>
+    )
   }
 
   return (
     <BrowserRouter>
       <NavBar />
+      {dbError && (
+        <div style={{ background: '#fff3cd', borderBottom: '1px solid #ffc107', color: '#7a5c00', padding: '0.65rem 2rem', fontSize: '0.9rem', fontWeight: '600' }}>
+          ⚠ {dbError}
+        </div>
+      )}
       <Routes>
-        <Route path="/" element={<HomePage />} />
+        <Route path="/"         element={<HomePage />} />
         <Route path="/register" element={<RegisterPage onRegister={addMember} terms={terms} />} />
-        <Route path="/members" element={<MembersPage members={members} />} />
-        <Route path="/teams" element={<TeamsPage members={members} />} />
-        <Route path="/admin" element={<AdminPage terms={terms} setTerms={setTerms} />} />
+        <Route path="/members"  element={<MembersPage members={members} />} />
+        <Route path="/teams"    element={<TeamsPage members={members} />} />
+        <Route path="/admin"    element={<AdminPage terms={terms} setTerms={setTerms} />} />
       </Routes>
     </BrowserRouter>
   )

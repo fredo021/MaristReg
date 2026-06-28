@@ -12,6 +12,9 @@ dist
 dist-ssr
 *.local
 
+# Environment / secrets
+.env
+
 # Personal notes
 FredNotes.txt
 
